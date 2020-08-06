@@ -1,4 +1,4 @@
-package org.fetchdata;
+
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,26 +10,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.*;
 
-@WebServlet("/DeletePlayer")
-public class DeletePlayer extends HttpServlet {
+@WebServlet("/FetchData")
+public class FetchData extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
   
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-			PrintWriter out=response.getWriter();	
+		PrintWriter out=response.getWriter();
 		try {
 			response.setContentType("text/html");
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn=DriverManager.getConnection("jdbc:mysql://@localhost:3306/PlayersDB","root","Swara@27");
-			
-			
-			String id = request.getParameter("ID");
-			
-			
-			PreparedStatement ps=conn.prepareStatement("delete from PlayersDB.players where ID=?");
-			
-			ps.setString(1, id);
-			ps.executeUpdate();
+			PreparedStatement ps=conn.prepareStatement("select * from PlayersDB.players");
+			ResultSet rs=ps.executeQuery();
+				
 			
 			out.println("<html>");
 			
@@ -39,26 +33,31 @@ public class DeletePlayer extends HttpServlet {
 			
 			out.println("<body><br><br><br><center>");
 			
-			out.println("<h1>Player Data Deleted Successfully from the Data Base</h1>");
+			out.println("<h1>Complete Players List</h1>");
+			
+			out.println("<table align=\"center\" = \"1\" class=\"table table-striped table-bordered\"><tr><td>ID</td><td>NAME</td><td>AGE</td><td>EMAIL</td><td>ADDRESS</td></tr>");
 			
 			
-			//response.getWriter().print("Player Data DELETED Successfully from the Data Base");
+			while(rs.next()) {
+				
+				out.println("<tr><td>"+rs.getString(1)+"</td><td>"+rs.getString(2)+"</td><td>"+rs.getString(3)+"</td><td>"+rs.getString(4)+"</td><td>"+rs.getString(5)+"</td></tr>");
+				
+			}
 			
-			out.println("<center> <form action=\"FetchData\" method='post'> <input type=\"submit\" value=\"Verify Deleted Entry\" class=\"btn btn-secondary\">");
+			out.println("</table></body></html>");
 			
-					out.println("</form></center>");
+			out.println("<center> <form action=\"FetchData.jsp\" method='post'> <br> <input type=\"submit\" value=\"Back To Home\" class=\"btn btn-primary\">");
 			
-			out.println("<center> <form action=\"FetchData.jsp\" method='post'> <input type=\"submit\" value=\"Back To Home\" class=\"btn btn-secondary\">");
-					
-					out.println("</form></center>");
+			out.println("</form></center>");
 			
 			
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			response.getWriter().print("Player Data NOT DELETED from the Data Base. Something wrong with your Data Entry");
+			response.getWriter().print("NOT able to Display the Players Data.");
 		
-			out.println("<center> <form action=\"FetchData.jsp\" method='post'> <input type=\"submit\" value=\"Back To Home\" class=\"btn btn-secondary\">");
+			
+			out.println("<center> <form action=\"FetchData.jsp\" method='post'> <br> <input type=\"submit\" value=\"Back To Home\" class=\"btn btn-primary\">");
 			
 			out.println("</form></center>");
 		}

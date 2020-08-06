@@ -1,4 +1,4 @@
-package org.fetchdata;
+
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.*;
 
-@WebServlet("/UpdatePlayer")
-public class UpdatePlayer extends HttpServlet {
+@WebServlet("/AddPlayer")
+public class AddPlayer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
   
@@ -23,11 +23,13 @@ public class UpdatePlayer extends HttpServlet {
 			Connection conn=DriverManager.getConnection("jdbc:mysql://@localhost:3306/PlayersDB","root","Swara@27");
 			
 			
-			String id = request.getParameter("ID");
+			PreparedStatement ps=conn.prepareStatement("insert into PlayersDB.players values(?,?,?,?,?)");
+			ps.setString(1, request.getParameter("ID"));
+			ps.setString(2, request.getParameter("NAME"));
+			ps.setString(3, request.getParameter("AGE"));
+			ps.setString(4, request.getParameter("EMAIL"));
+			ps.setString(5, request.getParameter("ADDRESS"));
 			
-			
-			PreparedStatement ps=conn.prepareStatement("update PlayersDB.players set NAME=\"Updated Krishna\" where ID='"+id+"'");
-		
 			ps.executeUpdate();
 			
 			out.println("<html>");
@@ -38,13 +40,17 @@ public class UpdatePlayer extends HttpServlet {
 			
 			out.println("<body><br><br><br><center>");
 			
-			out.println("<h1>Player Data Updated For : "+id+" Successfully</h1>");
+			out.println("<h1>New Player Added to the Team Successfully</h1>");
 			
-			out.println("<center> <form action=\"FetchData\" method='post'><br> <br><input type=\"submit\" value=\"Verify Updated Entry\" class=\"btn btn-secondary\">");
+			
+			
+			//response.getWriter().print("Player Data Entered Successfully into the Data Base");
+			
+			out.println("<center> <form action=\"FetchData\" method='post'><br><br> <input type=\"submit\" value=\"View Recently Entered Data\" class=\"btn btn-primary\">");
 			
 					out.println("</form></center>");
 			
-			out.println("<center> <form action=\"FetchData.jsp\" method='post'> <br><br><input type=\"submit\" value=\"Back To Home\" class=\"btn btn-secondary\">");
+			out.println("<center> <form action=\"FetchData.jsp\" method='post'><br><br> <input type=\"submit\" value=\"Back To Home\" class=\"btn btn-primary\">");
 					
 					out.println("</form></center>");
 			
@@ -52,9 +58,13 @@ public class UpdatePlayer extends HttpServlet {
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			response.getWriter().print("Player Data Not UPDATED in the Data Base. Something wrong with your Data Entry");
+			response.getWriter().print("Player Data NOT Entered into the Data Base. Something wrong with your Data Entry");
 		
-			out.println("<center> <form action=\"FetchData.jsp\" method='post'> <input type=\"submit\" value=\"Back To Home\" class=\"btn btn-secondary\">");
+			response.getWriter().print("\nIMP NOTE 1:  ID and Age should be entred in Integer format ");
+			response.getWriter().print("\nIMP NOTE 2:  NAME and EMAIL and ADDRESS should be in Character format ");
+			response.getWriter().print("\nIMP NOTE 3:  There Should NOT be duplicate ID ");
+			
+			out.println("<center> <form action=\"FetchData.jsp\" method='post'> <input type=\"submit\" value=\"Back To Home\" class=\"btn btn-primary\">");
 			
 			out.println("</form></center>");
 		}
