@@ -15,6 +15,18 @@
 	<dependencies>
 	
 	<dependency>
+    <groupId>logkit</groupId>
+    <artifactId>logkit</artifactId>
+    <version>1.0.1</version>
+</dependency>
+
+<dependency>
+    <groupId>commons-logging</groupId>
+    <artifactId>commons-logging</artifactId>
+    <version>1.1.1</version>
+</dependency>
+	
+	<dependency>
     <groupId>org.codehaus.plexus</groupId>
     <artifactId>plexus-classworlds</artifactId>
     <version>2.3</version>
@@ -115,11 +127,9 @@
 			<version>6.0.5</version>
 		</dependency>
 
-  <dependency>
-    <groupId>javax.annotation</groupId>
-    <artifactId>javax.annotation-api</artifactId>
-    <version>1.2</version>
-  </dependency>
+
+		<!-- Dependency for POI API -->
+		<!-- http://mvnrepository.com/artifact/org.apache.poi/poi -->
 		
 
 		<!-- http://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
